@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en-us">
+    <head>
+            <div class="jumbotron">
+                    <h1 class="display-4">Train Schedule</h1>
+                    <p class="lead">For the Winter Garden RailRoads</p>
+                    <hr class="my-4">
+                  </div>
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+
+        
+      
+
+    </head>
+
+    <body>
+       
+</div>
+<div class="card">
+    <div class="card-header">
+        Current Train Schedule
+    </div>
+    <table class="table">
+        <thead>
+            <tr>
+                <th scope="col">Train Name</th>
+                <th scope="col">Destiantion</th>
+                <th scope="col">Frequency (min)</th>
+                <th scope="col">Next Arrival</th>
+                <th scope="col">Minutes Away</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+
+                <td>Winter Garder Xpress</td>
+                <td>Orlando/td>
+                <td>30</td>
+                <td>03:30pm</td>
+                <td>30</td>
+                
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+    <div class="card-header">
+        <div class="card-body">
+            <form role="form">
+                <div class="form-group row">
+                    <label for="name-input"> Train Name</label>
+                    <input class="form-control" id="name-input" type="text">
+                </div>
+                <div class="form-group row">
+                        <label for="name-input">Destiantion</label>
+                        <input class="form-control" id="role-input" type="text">
+                    </div>
+                    <div class="form-group row">
+                            <label for="name-input">Frequency (mins)</label>
+                            <input class="form-control" id="date-input" type="text">
+                        </div> 
+                        <div class="form-group row">
+                                <label for="name-input">Next Arrival</label>
+                                <input class="form-control" id="rate-input" type="text">
+                            </div> 
+                        <button class="btn btn-default" id="add-employee" type="submit"> Add Employee</button>
+
+
+            </form>
+        </div>
+</div>
+
+
+
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+        <script src="https://www.gstatic.com/firebasejs/5.10.0/firebase.js"></script>
+        <script src="https://cdn.jsdelivr.net/momentjs/2.12.0/moment.min.js"></script>
+
+        <script>
+                // Initialize Firebase
+                var config = {
+                  apiKey: "AIzaSyBkZpqU7Rw0fnlMxAFZt1ZiJnXHP2mARns",
+                  authDomain: "employeedata-e31af.firebaseapp.com",
+                  databaseURL: "https://employeedata-e31af.firebaseio.com",
+                  projectId: "employeedata-e31af",
+                  storageBucket: "employeedata-e31af.appspot.com",
+                  messagingSenderId: "558996772866"
+                };
+                firebase.initializeApp(config);
+
+                var database = firebase.database();
+
+                 var name = "";
+                 var role = "";
+                 var date = 0;
+                 var rate = 0;
+
+                $(document).ready(function(){
+    $("#add-employee").on("click", function(){
+     var row = $("<tr>");
+        
+
+        event.preventDefault();
+        var name = $("#name-input").val().trim();
+        var role = $("#role-input").val().trim();
+        var date = moment($("#date-input").val().trim(), "MM/DD/YYYY".format("X"));
+        var rate = $("#rate-input").val().trim();
+        
+        
+
+        console.log(name)
+        console.log(role)
+        console.log(date)
+        console.log(rate)
+
+        database.ref().push({
+            name: name,
+            role: role,
+            date: date,
+            rate: rate,
+            dateAdded: firebase.database.ServerValue.TIMESTAMP
+        });
+
+$("#name-input").val("")
+$("#role-input").val("")
+$("#date-input").val("")
+$("#rate-input").val("")
+      });
+  });
+
+  database.ref().on("child_added", function (childSnapshot) {
+        var name = childSnapshot.val().name;
+        var role = childSnapshot.val().role;
+        var date = childSnapshot.val().date;
+        var rate = childSnapshot.val().rate;
+        console.log(childSnapshot);
+
+        var row = $("<tr>").append(
+            $("<td>").text(name),
+            $("<td>").text(role),
+            $("<td>").text(date),
+            $("<td>").text(rate)
+        )
+        $("#tbody").append(row)
+
+            })
+
+
+
+
+              </script>
+
+    </body>
+</html>
